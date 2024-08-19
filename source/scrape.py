@@ -109,10 +109,10 @@ def to_csv(countries, output_dir):
 def to_yaml_json(countries, output_dir):
     json_data = {'iso3166': countries}
 
-    with open('../data/json/iso3166_list.json', 'w') as fh:
+    with open('../data/json/iso3166_collection.json', 'w') as fh:
         fh.write(json.dumps(json_data, indent=4, sort_keys=True))
 
-    with open(f"{output_dir}/yaml/iso3166_list.yaml", 'w') as fh:
+    with open(f"{output_dir}/yaml/iso3166_collection.yaml", 'w') as fh:
         yaml.dump({'iso3166': countries}, fh, default_flow_style=False)
 
     with open(f"{output_dir}/yaml/iso3166_from_alpha2.yaml", 'w') as fh:
@@ -160,13 +160,15 @@ def to_yaml_json(countries, output_dir):
 
 def to_sql(countries, output_dir):
     ddl_statement = """
-    CREATE TABLE iso3166 (
-        `country_name` VARCHAR(255),
-        `alpha2` CHAR(2),
-        `alpha3` CHAR(3),
-        `numeric` CHAR(3)
-    );
+CREATE TABLE iso3166 (
+    `country_name` VARCHAR(255),
+    `alpha2` CHAR(2),
+    `alpha3` CHAR(3),
+    `numeric` CHAR(3)
+);
     """
+    with open(f"{output_dir}/sql/iso3166_ddl.sql", 'w') as f:
+        f.write(ddl_statement)
 
     readme_interpolate.update({'sql_ddl': ddl_statement})
 
@@ -174,13 +176,13 @@ def to_sql(countries, output_dir):
     for country in countries:
         insert_statement = f"""INSERT INTO iso3166 (country_name, alpha2, alpha3, numeric) VALUES ('{country.get('country_name').replace("'", "''")}', '{country.get('alpha2').replace("'", "''")}', '{country.get('alpha3').replace("'", "''")}', '{country.get('numeric').replace("'", "''")}');"""
         insert_statements.append(insert_statement.strip())
-    sql_script = f"{ddl_statement}\n{"\n".join(insert_statements)}\nCOMMIT;\n"
-    with open(f"{output_dir}/sql/iso3166.sql", 'w') as f:
+    sql_script = f"/*\n{ddl_statement}\n*/\n\n{"\n".join(insert_statements)}\nCOMMIT;\n"
+    with open(f"{output_dir}/sql/iso3166_dml.sql", 'w') as f:
         f.write(sql_script)
 
 
 def to_pickle(countries, output_dir):
-    _pickle(countries, f"{output_dir}/pickle/iso3166_list.pickle")
+    _pickle(countries, f"{output_dir}/pickle/iso3166_collection.pickle")
 
     alpha2_to_country = {}
     for _country in countries:

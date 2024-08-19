@@ -1,11 +1,14 @@
+/*
 
-    CREATE TABLE iso3166 (
-        `country_name` VARCHAR(255),
-        `alpha2` CHAR(2),
-        `alpha3` CHAR(3),
-        `numeric` CHAR(3)
-    );
+CREATE TABLE iso3166 (
+    `country_name` VARCHAR(255),
+    `alpha2` CHAR(2),
+    `alpha3` CHAR(3),
+    `numeric` CHAR(3)
+);
     
+*/
+
 INSERT INTO iso3166 (country_name, alpha2, alpha3, numeric) VALUES ('Afghanistan', 'AF', 'AFG', '004');
 INSERT INTO iso3166 (country_name, alpha2, alpha3, numeric) VALUES ('Åland Islands', 'AX', 'ALA', '248');
 INSERT INTO iso3166 (country_name, alpha2, alpha3, numeric) VALUES ('Albania', 'AL', 'ALB', '008');
